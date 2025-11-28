@@ -1,0 +1,31 @@
+{
+  "name": "nba-2k26-website",
+  "version": "1.0.0",
+  "description": "Футуристичный веб-сайт про NBA 2K26 с реальными данными игр NBA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "nba",
+    "basketball",
+    "nba-2k26",
+    "express",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "axios": "^1.6.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

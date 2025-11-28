@@ -1,11 +1,711 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>NBA 2K26 - Будущее Баскетбола</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Анимированный фон */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 100, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 150, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(150, 0, 255, 0.1) 0%, transparent 50%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, -50px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            padding: 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 150, 255, 0.2);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff0066, #00d4ff, #9d00ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px rgba(0, 150, 255, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #00d4ff;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Sections */
+        section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff0066, #00d4ff);
+            animation: lineExpand 2s ease-in-out infinite;
+        }
+
+        @keyframes lineExpand {
+            0%, 100% { width: 60px; }
+            50% { width: 120px; }
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(157, 0, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 102, 0.1) 0%, transparent 70%);
+            animation: cardGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            border-color: #ff0066;
+            box-shadow: 0 0 30px rgba(255, 0, 102, 0.4);
+        }
+
+        .card h3 {
+            color: #ff0066;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card p {
+            line-height: 1.6;
+            color: #ccc;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Features List */
+        .features {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .features li {
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .features li:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            border: 2px solid rgba(157, 0, 255, 0.3);
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.1);
+            border-color: #9d00ff;
+            box-shadow: 0 0 25px rgba(157, 0, 255, 0.5);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff0066, #9d00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: #00d4ff;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 2px solid rgba(0, 150, 255, 0.3);
+            margin-top: 3rem;
+        }
+
+        footer p {
+            color: #888;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Glow effect */
+        .glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(0, 212, 255, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 30px rgba(0, 212, 255, 0.6); }
+        }
+
+        /* Game Cards */
+        .game-card {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .game-card:hover::before {
+            left: 100%;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 0, 102, 0.2);
+        }
+
+        .game-status {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(255, 0, 102, 0.2);
+            border: 1px solid #ff0066;
+            border-radius: 20px;
+            color: #ff0066;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .game-teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        .team {
+            flex: 1;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-city {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff0066, #9d00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .vs-divider {
+            padding: 0 1rem;
+            color: #666;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #00d4ff;
+            font-size: 1.2rem;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .error {
+            background: rgba(255, 0, 102, 0.1);
+            border: 1px solid rgba(255, 0, 102, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            color: #ff0066;
+            text-align: center;
+        }
+
+        .refresh-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, #ff0066, #9d00ff);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.5);
+        }
+    </style>
 </head>
 <body>
-    <p>Hello, <World class="yes"></World></p> 
+    <div class="bg-animation"></div>
+
+    <header>
+        <h1>NBA 2K26</h1>
+        <p class="tagline">Будущее Баскетбола Уже Здесь</p>
+    </header>
+
+    <nav>
+        <a href="#live-games">Последние Игры</a>
+        <a href="#about">О Игре</a>
+        <a href="#basketball">Баскетбол</a>
+        <a href="#features">Особенности</a>
+        <a href="#stats">Статистика</a>
+    </nav>
+
+    <div class="container">
+        <section id="live-games">
+            <h2 class="glow">Последние Игры NBA</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #888;">Реальные результаты матчей NBA</p>
+            <div id="games-container">
+                <div class="loading">Загрузка данных</div>
+            </div>
+            <div style="text-align: center;">
+                <button class="refresh-btn" onclick="loadGames()">Обновить данные</button>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2>О NBA 2K26</h2>
+            <p>NBA 2K26 - это новейшая часть легендарной серии баскетбольных симуляторов, которая переносит реализм и геймплей на совершенно новый уровень. Используя передовые технологии захвата движений и искусственный интеллект, игра создает самый реалистичный баскетбольный опыт.</p>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>Реалистичная Графика</h3>
+                    <p>Невероятная детализация игроков, арен и болельщиков. Каждая капля пота, каждое движение - все выглядит как в реальной жизни благодаря технологии фотограмметрии и ray tracing.</p>
+                </div>
+                <div class="card">
+                    <h3>Революционный ИИ</h3>
+                    <p>Продвинутый искусственный интеллект адаптируется к вашему стилю игры. Противники учатся на ваших действиях и создают уникальные игровые ситуации каждый раз.</p>
+                </div>
+                <div class="card">
+                    <h3>MyCAREER</h3>
+                    <p>Создайте своего уникального игрока и пройдите путь от новичка до звезды NBA. Принимайте решения, которые повлияют на вашу карьеру и жизнь вне площадки.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="basketball">
+            <h2>История Баскетбола</h2>
+            <p>Баскетбол был изобретен в 1891 году доктором Джеймсом Нейсмитом в Спрингфилде, Массачусетс. С тех пор игра превратилась в один из самых популярных видов спорта в мире.</p>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">1891</div>
+                    <div class="stat-label">Год создания</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Игроков в команде</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30</div>
+                    <div class="stat-label">Команд в NBA</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">450+</div>
+                    <div class="stat-label">Игроков в NBA</div>
+                </div>
+            </div>
+
+            <div class="cards" style="margin-top: 2rem;">
+                <div class="card">
+                    <h3>Правила Игры</h3>
+                    <p>Две команды по 5 игроков соревнуются за то, чтобы забросить мяч в корзину соперника. Игра длится 4 четверти по 12 минут в NBA. Команда с наибольшим количеством очков побеждает.</p>
+                </div>
+                <div class="card">
+                    <h3>Позиции</h3>
+                    <p>Разыгрывающий защитник, атакующий защитник, лёгкий форвард, тяжёлый форвард и центровой - каждая позиция имеет свою уникальную роль и требования к навыкам.</p>
+                </div>
+                <div class="card">
+                    <h3>Легенды NBA</h3>
+                    <p>Майкл Джордан, Коби Брайант, Леброн Джеймс, Мэджик Джонсон - эти имена навсегда вписаны в историю баскетбола и вдохновляют миллионы фанатов по всему миру.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2 class="glow">Особенности NBA 2K26</h2>
+            <ul class="features">
+                <li><strong>Новая система дриблинга:</strong> Полный контроль над движениями с использованием продвинутой физики</li>
+                <li><strong>Расширенный MyTEAM:</strong> Собирайте команду мечты из игроков всех эпох NBA</li>
+                <li><strong>Онлайн-лиги:</strong> Соревнуйтесь с игроками со всего мира в турнирах и сезонах</li>
+                <li><strong>Режим "Эра":</strong> Переживите золотые эпохи баскетбола, от 80-х до современности</li>
+                <li><strong>Динамические комментарии:</strong> ИИ-комментаторы реагируют на события в реальном времени</li>
+                <li><strong>Кроссплатформенная игра:</strong> Играйте с друзьями независимо от платформы</li>
+                <li><strong>Тренировочные режимы:</strong> Совершенствуйте навыки в специальных упражнениях</li>
+                <li><strong>Редактор бросков:</strong> Создайте свою уникальную механику броска</li>
+            </ul>
+        </section>
+
+        <section id="stats">
+            <h2>Впечатляющие Цифры</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Игроков NBA</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30</div>
+                    <div class="stat-label">Команд</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Анимаций</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Арен</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 2rem; background: rgba(0, 212, 255, 0.1); border-radius: 15px; border: 1px solid rgba(0, 212, 255, 0.3);">
+                <h3 style="color: #00d4ff; margin-bottom: 1rem;">Почему NBA 2K26?</h3>
+                <p style="line-height: 1.8;">
+                    NBA 2K26 представляет собой вершину баскетбольных симуляторов. Каждый год серия устанавливает новые стандарты реализма, геймплея и контента.
+                    В 2K26 вы получите не просто игру, а полноценный баскетбольный опыт, который позволит вам почувствовать себя частью мира NBA.
+                    От невероятной графики до глубоких режимов карьеры - все создано для того, чтобы подарить вам незабываемые моменты.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 NBA 2K26. Футуристичный дизайн для начинающих разработчиков.</p>
+        <p style="margin-top: 0.5rem; color: #00d4ff;">Создано с использованием HTML, CSS & JavaScript</p>
+    </footer>
+
+    <script>
+        // Функция для загрузки игр с API
+        async function loadGames() {
+            const container = document.getElementById('games-container');
+            container.innerHTML = '<div class="loading">Загрузка данных</div>';
+
+            try {
+                const response = await fetch('/api/games');
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Ошибка при загрузке данных');
+                }
+
+                if (data.data.length === 0) {
+                    container.innerHTML = `
+                        <div class="error">
+                            <p>Сегодня нет завершенных игр</p>
+                            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Проверьте позже для новых результатов</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Создаем сетку карточек
+                const gamesGrid = document.createElement('div');
+                gamesGrid.className = 'cards';
+
+                data.data.forEach(game => {
+                    const gameCard = createGameCard(game);
+                    gamesGrid.appendChild(gameCard);
+                });
+
+                container.innerHTML = '';
+                container.appendChild(gamesGrid);
+
+                // Показываем уведомление если это демо-данные
+                if (data.meta && data.meta.demo) {
+                    const demoNotice = document.createElement('div');
+                    demoNotice.style.cssText = 'margin-top: 1rem; padding: 1rem; background: rgba(255, 165, 0, 0.1); border: 1px solid rgba(255, 165, 0, 0.3); border-radius: 10px; color: #ffa500; text-align: center; font-size: 0.9rem;';
+                    demoNotice.textContent = '⚠️ ' + data.meta.message;
+                    container.appendChild(demoNotice);
+                }
+
+            } catch (error) {
+                console.error('Error loading games:', error);
+                container.innerHTML = `
+                    <div class="error">
+                        <p>Ошибка при загрузке данных об играх</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">${error.message}</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Убедитесь, что сервер запущен</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Функция для создания карточки игры
+        function createGameCard(game) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+
+            const winner = game.homeScore > game.awayScore ? 'home' : 'away';
+
+            card.innerHTML = `
+                <div class="game-header">
+                    <span class="game-status">${game.status}</span>
+                </div>
+                <div class="game-teams">
+                    <div class="team ${winner === 'away' ? 'winner' : ''}">
+                        <div class="team-city">${game.awayTeam.city}</div>
+                        <div class="team-name">${game.awayTeam.name}</div>
+                        <div class="team-score">${game.awayScore}</div>
+                    </div>
+                    <div class="vs-divider">VS</div>
+                    <div class="team ${winner === 'home' ? 'winner' : ''}">
+                        <div class="team-city">${game.homeTeam.city}</div>
+                        <div class="team-name">${game.homeTeam.name}</div>
+                        <div class="team-score">${game.homeScore}</div>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Загружаем игры при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadGames);
+
+        // Автообновление каждые 60 секунд
+        setInterval(loadGames, 60000);
+    </script>
 </body>
 </html>
